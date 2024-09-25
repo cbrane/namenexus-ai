@@ -20,7 +20,6 @@ const openai = new OpenAI({
 
 export async function generateNames(prompt: string, count: number): Promise<string[]> {
   try {
-    console.log('OpenAI API Key:', apiKey.slice(0, 10) + '...');
     console.log('OpenAI Request:', { prompt, count });
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",

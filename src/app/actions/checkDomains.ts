@@ -12,6 +12,29 @@ const NAMECHEAP_API_KEY = process.env.NAMECHEAP_API_KEY;
 const NAMECHEAP_USERNAME = process.env.NAMECHEAP_USERNAME;
 const NAMECHEAP_CLIENT_IP = process.env.NAMECHEAP_CLIENT_IP;
 
+// Define the structure of the API response
+interface ApiResponse {
+  ApiResponse: {
+    $: { Status: string };
+    Errors?: { Error: { _: string }[] }[];
+    CommandResponse: {
+      UserGetPricingResult?: {
+        ProductType: {
+          $: { Name: string };
+          ProductCategory: {
+            $: { Name: string };
+            Product: {
+              $: { Name: string };
+              Price: { $: { Duration: string; DurationType: string; Price: string } }[];
+            }[];
+          }[];
+        }[];
+      }[];
+      DomainCheckResult?: { $: { Available: string; IsPremiumName: string; PremiumRegistrationPrice?: string } }[];
+    }[];
+  };
+}
+
 async function getDomainPrice(domain: string): Promise<number | null> {
   const url = new URL('https://api.namecheap.com/xml.response');
   url.searchParams.append('ApiUser', NAMECHEAP_API_USER || '');
@@ -27,22 +50,24 @@ async function getDomainPrice(domain: string): Promise<number | null> {
   try {
     const response = await fetch(url.toString());
     const text = await response.text();
-    const result = await parseXml(text);
+    const result = await parseXml(text) as ApiResponse;
 
     if (result.ApiResponse.$.Status !== 'OK') {
-      throw new Error(`API response status is not OK: ${result.ApiResponse.Errors[0].Error[0]._}`);
+      throw new Error(`API response status is not OK: ${result.ApiResponse.Errors?.[0]?.Error[0]._ || 'Unknown error'}`);
     }
 
-    const productType = result.ApiResponse.CommandResponse[0].UserGetPricingResult[0].ProductType.find((pt: any) => pt.$.Name.toLowerCase() === 'domains');
+    const productType = result.ApiResponse.CommandResponse[0].UserGetPricingResult?.[0]?.ProductType.find(
+      (pt) => pt.$.Name.toLowerCase() === 'domains'
+    );
     if (!productType) throw new Error('DOMAIN product type not found');
 
-    const productCategory = productType.ProductCategory.find((pc: any) => pc.$.Name.toLowerCase() === 'register');
+    const productCategory = productType.ProductCategory.find((pc) => pc.$.Name.toLowerCase() === 'register');
     if (!productCategory) throw new Error('REGISTER product category not found');
 
-    const product = productCategory.Product.find((p: any) => p.$.Name === domain.split('.').pop());
+    const product = productCategory.Product.find((p) => p.$.Name === domain.split('.').pop());
     if (!product) throw new Error(`Product for TLD ${domain.split('.').pop()} not found`);
 
-    const price = product.Price.find((p: any) => p.$.Duration === '2' && p.$.DurationType === 'YEAR');
+    const price = product.Price.find((p) => p.$.Duration === '2' && p.$.DurationType === 'YEAR');
     if (!price) throw new Error(`Price for 2 year registration not found`);
 
     const yearlyPrice = parseFloat(price.$.Price);
@@ -72,13 +97,15 @@ export async function checkDomains(domains: string[]): Promise<DomainResult[]> {
       const text = await response.text();
 
       // Parse XML response
-      const result = await parseXml(text);
+      const result = await parseXml(text) as ApiResponse;
       
       if (result.ApiResponse.$.Status !== 'OK') {
-        throw new Error(`API response status is not OK: ${result.ApiResponse.Errors[0].Error[0]._}`);
+        throw new Error(`API response status is not OK: ${result.ApiResponse.Errors?.[0]?.Error[0]._ || 'Unknown error'}`);
       }
 
-      const domainCheck = result.ApiResponse.CommandResponse[0].DomainCheckResult[0].$;
+      const domainCheck = result.ApiResponse.CommandResponse[0].DomainCheckResult?.[0].$;
+      if (!domainCheck) throw new Error('Domain check result not found');
+
       const available = domainCheck.Available === 'true';
       let price = null;
 

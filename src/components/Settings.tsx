@@ -7,15 +7,15 @@ interface SettingsProps {
   nameCount: number;
   setNameCount: (count: number) => void;
   tlds: string[];
-  setTlds: (tlds: string[]) => void;
+  setTlds: React.Dispatch<React.SetStateAction<string[]>>;
   maxPrice: number;
   setMaxPrice: (price: number) => void;
 }
 
 export function Settings({ nameCount, setNameCount, tlds, setTlds, maxPrice, setMaxPrice }: SettingsProps) {
   const handleTldChange = (tld: string) => {
-    setTlds(prev => 
-      prev.includes(tld) ? prev.filter(t => t !== tld) : [...prev, tld]
+    setTlds((prev: string[]) => 
+      prev.includes(tld) ? prev.filter((t: string) => t !== tld) : [...prev, tld]
     )
   }
 
