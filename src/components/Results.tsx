@@ -1,10 +1,9 @@
 // src/components/Results.tsx
 import { useState } from 'react'
-import { CheckCircle, XCircle, Info, Heart } from 'lucide-react'
+import { CheckCircle, XCircle, Heart, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { DomainResult } from './StartupNameGenerator'
 
 interface ResultsProps {
@@ -71,7 +70,7 @@ export function Results({ results }: ResultsProps) {
             <p className="text-gray-600">{result.name}</p>
             <div className="mt-2">
               <span className="font-semibold text-blue-600">
-                {result.price !== null ? `$${result.price.toFixed(2)}/year` : 'Price unknown'}
+                {result.price !== null ? `$${result.price.toFixed(2)}/yr` : 'Price unknown'}
               </span>
             </div>
             <div className="mt-4 flex space-x-2">
@@ -79,7 +78,14 @@ export function Results({ results }: ResultsProps) {
                 <Heart className="w-4 h-4 mr-2" />
                 Save
               </Button>
-              <Button variant="outline" size="sm">More Info</Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => window.open(`https://www.namecheap.com/domains/registration/results/?domain=${result.name}`, '_blank')}
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                View on Namecheap
+              </Button>
             </div>
           </div>
         ))}

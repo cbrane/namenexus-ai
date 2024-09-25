@@ -11,7 +11,7 @@ export async function generateNames(prompt: string, count: number): Promise<stri
   try {
     console.log('OpenAI Request:', { prompt, count });
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
