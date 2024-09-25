@@ -2,13 +2,25 @@
 'use server'
 
 import OpenAI from 'openai'
+import fs from 'fs'
+import path from 'path'
+
+// Read the API key directly from .env.local
+const envPath = path.resolve(process.cwd(), '.env.local')
+const envContent = fs.readFileSync(envPath, 'utf-8')
+const apiKey = envContent.match(/OPENAI_API_KEY=(.*)/)?.[1]
+
+if (!apiKey) {
+  throw new Error('OPENAI_API_KEY not found in .env.local')
+}
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: apiKey,
 })
 
 export async function generateNames(prompt: string, count: number): Promise<string[]> {
   try {
+    console.log('OpenAI API Key:', apiKey.slice(0, 10) + '...');
     console.log('OpenAI Request:', { prompt, count });
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -28,7 +40,6 @@ export async function generateNames(prompt: string, count: number): Promise<stri
     console.log('OpenAI Response:', response);
 
     const content = response.choices[0].message.content || '[]'
-    // Remove any markdown formatting if present
     const jsonString = content.replace(/```json\n|\n```/g, '').trim()
     const generatedNames = JSON.parse(jsonString)
     
