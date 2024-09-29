@@ -1,12 +1,13 @@
 // src/components/StartupNameGenerator.tsx
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Header } from './Header'
 import { MainContent } from './MainContent'
 import { Settings } from './Settings'
 import { GenerateButton } from './GenerateButton'
 import { Results } from './Results'
+import { SavedNames } from './SavedNames'
 import { generateNames } from '../app/actions/generateNames'
 import { checkDomains } from '../app/actions/checkDomains'
 
@@ -19,10 +20,18 @@ export interface DomainResult {
 export default function StartupNameGenerator() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [results, setResults] = useState<DomainResult[]>([])
+  const [savedDomains, setSavedDomains] = useState<DomainResult[]>([])
   const [prompt, setPrompt] = useState('')
   const [nameCount, setNameCount] = useState(5)
   const [tlds, setTlds] = useState(['.com'])
   const [maxPrice, setMaxPrice] = useState(50)
+
+  useEffect(() => {
+    const storedDomains = localStorage.getItem('savedDomains')
+    if (storedDomains) {
+      setSavedDomains(JSON.parse(storedDomains))
+    }
+  }, [])
 
   const handleGenerate = async () => {
     setIsGenerating(true)
@@ -53,6 +62,18 @@ export default function StartupNameGenerator() {
     }
   }
 
+  const handleSave = (domain: DomainResult) => {
+    const updatedSavedDomains = [...savedDomains, domain]
+    setSavedDomains(updatedSavedDomains)
+    localStorage.setItem('savedDomains', JSON.stringify(updatedSavedDomains))
+  }
+
+  const handleRemove = (name: string) => {
+    const updatedSavedDomains = savedDomains.filter(d => d.name !== name)
+    setSavedDomains(updatedSavedDomains)
+    localStorage.setItem('savedDomains', JSON.stringify(updatedSavedDomains))
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -68,7 +89,8 @@ export default function StartupNameGenerator() {
             setMaxPrice={setMaxPrice}
           />
           <GenerateButton onGenerate={handleGenerate} isGenerating={isGenerating} />
-          <Results results={results} />
+          <Results results={results} onSave={handleSave} />
+          <SavedNames savedDomains={savedDomains} onRemove={handleRemove} />
         </div>
       </div>
     </div>

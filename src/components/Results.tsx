@@ -8,9 +8,10 @@ import { DomainResult } from './StartupNameGenerator'
 
 interface ResultsProps {
   results: DomainResult[];
+  onSave: (domain: DomainResult) => void;
 }
 
-export function Results({ results }: ResultsProps) {
+export function Results({ results, onSave }: ResultsProps) {
   const [showUnavailable, setShowUnavailable] = useState(true)
   const [sortBy, setSortBy] = useState('default')
 
@@ -74,7 +75,7 @@ export function Results({ results }: ResultsProps) {
               </span>
             </div>
             <div className="mt-4 flex space-x-2">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => onSave(result)}>
                 <Heart className="w-4 h-4 mr-2" />
                 Save
               </Button>
