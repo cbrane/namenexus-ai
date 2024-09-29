@@ -1,7 +1,7 @@
 import React from 'react'
 import { DomainResult } from './StartupNameGenerator'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, XCircle, ExternalLink } from 'lucide-react'
+import { CheckCircle, XCircle, ExternalLink, Trash } from 'lucide-react'
 
 interface SavedNamesProps {
   savedDomains: DomainResult[]
@@ -35,6 +35,7 @@ export function SavedNames({ savedDomains, onRemove }: SavedNamesProps) {
             </div>
             <div className="mt-4 flex space-x-2">
               <Button variant="outline" size="sm" onClick={() => onRemove(domain.name)}>
+                <Trash className="w-4 h-4 mr-2" />
                 Remove
               </Button>
               <Button 

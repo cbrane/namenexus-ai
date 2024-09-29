@@ -92,7 +92,7 @@ export default function StartupNameGenerator() {
             setMaxPrice={setMaxPrice}
           />
           <GenerateButton onGenerate={handleGenerate} isGenerating={isGenerating} />
-          <Results results={results} onSave={handleSave} />
+          <Results results={results} onSave={handleSave} savedDomains={savedDomains} />
           <SavedNames savedDomains={savedDomains} onRemove={handleRemove} />
         </div>
       </div>
