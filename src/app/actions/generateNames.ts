@@ -22,11 +22,11 @@ export async function generateNames(prompt: string, count: number): Promise<stri
   try {
     console.log('OpenAI Request:', { prompt, count });
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4-0125-preview",
       messages: [
         {
           role: "system",
-          content: `You are a creative AI assistant specialized in generating startup names. Generate ${count} unique, creative, and relevant startup names based on the given prompt. Return only a JSON array of strings, without any additional formatting or explanation.`
+          content: `You are a creative AI assistant specialized in generating startup names. Generate ${count} unique, creative, and relevant startup names based on the given prompt. Return only a JSON array of strings, without any additional formatting or explanation. Each name should be a single word or multiple words without spaces.`
         },
         {
           role: "user",
@@ -40,11 +40,14 @@ export async function generateNames(prompt: string, count: number): Promise<stri
 
     const content = response.choices[0].message.content || '[]'
     const jsonString = content.replace(/```json\n|\n```/g, '').trim()
-    const generatedNames = JSON.parse(jsonString)
+    let generatedNames = JSON.parse(jsonString)
     
     if (!Array.isArray(generatedNames)) {
       throw new Error('Generated names are not in the expected format')
     }
+    
+    // Remove spaces from each name
+    generatedNames = generatedNames.map(name => name.replace(/\s+/g, ''))
     
     console.log('Generated Names:', generatedNames);
     return generatedNames
