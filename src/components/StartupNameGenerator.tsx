@@ -35,6 +35,7 @@ export default function StartupNameGenerator() {
 
   const handleGenerate = async () => {
     setIsGenerating(true)
+    setResults([]) // Clear previous results
     try {
       console.log('Generating names with prompt:', prompt)
       const names = await generateNames(prompt, nameCount)
@@ -42,7 +43,6 @@ export default function StartupNameGenerator() {
 
       if (names.length === 0) {
         console.error('No names were generated')
-        setResults([])
         return
       }
 
@@ -51,12 +51,11 @@ export default function StartupNameGenerator() {
       const domainResults = await checkDomains(domains)
       console.log('Domain check results:', domainResults)
 
-      const filteredResults = domainResults.filter(result => result.price === null || result.price <= maxPrice)
-      console.log('Filtered results:', filteredResults)
-      setResults(filteredResults)
+      // Set all results without filtering
+      setResults(domainResults)
+      console.log('Set results:', domainResults)
     } catch (error) {
       console.error('Error generating names:', error)
-      setResults([])
     } finally {
       setIsGenerating(false)
     }

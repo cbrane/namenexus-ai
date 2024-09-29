@@ -25,8 +25,10 @@ export function Results({ results, onSave, savedDomains }: ResultsProps) {
 
   const filteredResults = showUnavailable ? sortedResults : sortedResults.filter(r => r.available)
 
+  console.log('Filtered results:', filteredResults)
+
   if (results.length === 0) {
-    return <p className="text-center text-gray-600 mt-4">No results found. Try adjusting your settings or generating new names.</p>
+    return <p className="text-center text-gray-600 mt-4">No results found. Try generating new names.</p>
   }
 
   return (
