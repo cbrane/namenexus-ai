@@ -1,19 +1,29 @@
-# AI Startup Name Generator
+# NameNexus - AI-powered startup naming with instant domain checks
 
-This is a [Next.js](https://nextjs.org) project that uses AI to generate startup names and check domain availability.
+## Description
+
+An AI-powered startup name generator that creates unique business names and instantly checks domain availability. This tool helps entrepreneurs find catchy, available names for their ventures across multiple TLDs.
+
+## Key Features
+
+- AI-driven name generation based on user prompts
+- Real-time domain availability checking
+- Multiple TLD options (.com, .io, .ai, .tech, .co)
+- Customizable number of name suggestions
+- Maximum price filter for domains
+- Option to show/hide unavailable domains
+- Save favorite names locally
+- Direct link to view/purchase domains on Namecheap
+
+This repository contains the full-stack application, including the AI name generation logic, domain availability API integration, and the user interface for a seamless naming experience.
 
 ## How It Works
 
 1. **User Input**: Users enter a description of their startup idea or the type of names they're looking for in the main text area.
 
-2. **Name Generation**: When the user clicks the "Generate Names" button, the app sends a request to the OpenAI API to generate startup names based on the user's input. This process is handled by the `generateNames` function:
+2. **Name Generation**: When the user clicks the "Generate Names" button, the app sends a request to the OpenAI API to generate startup names based on the user's input.
 
-```typescript:src/app/actions/generateNames.ts
-startLine: 10
-endLine: 44
-```
-
-3. **Domain Availability**: The app then checks the availability of domains for each generated name using the Namecheap API. This is done in the `checkDomains` function (not shown in the provided code snippets).
+3. **Domain Availability**: The app checks the availability of domains for each generated name using the Namecheap API.
 
 4. **Results Display**: The generated names and their domain availability are displayed to the user. Users can sort the results, filter by availability, and see pricing information.
 
@@ -22,19 +32,16 @@ endLine: 44
    - Choosing which Top-Level Domains (TLDs) to check
    - Setting a maximum price for domains
 
-These settings are managed in the `Settings` component:
+6. **Save and Load**: Users can save their favorite generated names locally and load them later.
 
-```typescript:src/components/Settings.tsx
-startLine: 1
-endLine: 74
-```
+7. **Purchase Options**: Users can click on available domains to view and potentially purchase them on Namecheap.
 
-6. **User Interface**: The main interface is handled by the `StartupNameGenerator` component, which orchestrates the entire process:
+## Key Components
 
-```typescript:src/components/StartupNameGenerator.tsx
-startLine: 19
-endLine: 76
-```
+- `StartupNameGenerator`: The main component that orchestrates the name generation process.
+- `Settings`: Manages user preferences for name generation and domain checking.
+- `ResultsList`: Displays the generated names, domain availability, and pricing.
+- `SavedNames`: Allows users to save and load their favorite generated names.
 
 ## Getting Started
 
@@ -62,15 +69,30 @@ To run this project, you need to set up the following environment variables in a
 - `NAMECHEAP_USERNAME`: Your Namecheap username
 - `NAMECHEAP_CLIENT_IP`: Your client IP address
 
+## Technologies Used
+
+- Next.js: React framework for building the web application
+- OpenAI API: For generating startup names
+- Namecheap API: For checking domain availability and pricing
+- Tailwind CSS: For styling and responsive design
+
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about the technologies used in this project, check out the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [OpenAI API Documentation](https://platform.openai.com/docs/)
+- [Namecheap API Documentation](https://www.namecheap.com/support/api/intro/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This app can be easily deployed on platforms like Vercel or Netlify. Make sure to set up the required environment variables in your deployment environment.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License.
