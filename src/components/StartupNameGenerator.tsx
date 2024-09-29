@@ -77,7 +77,10 @@ export default function StartupNameGenerator() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-        <Header />
+        <Header 
+          title="✨ NameNexus"
+          subtitle="AI-powered startup naming with instant domain checks"
+        />
         <div className="p-6 sm:p-8">
           <MainContent prompt={prompt} setPrompt={setPrompt} />
           <Settings
