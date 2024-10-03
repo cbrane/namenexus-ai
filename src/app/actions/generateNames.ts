@@ -48,6 +48,8 @@ export async function generateNames(prompt: string, count: number): Promise<stri
     
     // Remove spaces from each name
     generatedNames = generatedNames.map(name => name.replace(/\s+/g, ''))
+    // Change each name to title case
+    generatedNames = generatedNames.map((name: string) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase())
     
     console.log('Generated Names:', generatedNames);
     return generatedNames
