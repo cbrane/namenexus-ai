@@ -22,7 +22,7 @@ export async function generateNames(prompt: string, count: number): Promise<stri
   try {
     console.log('OpenAI Request:', { prompt, count });
     const response = await openai.chat.completions.create({
-      model: "gpt-4-0125-preview",
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
@@ -33,7 +33,7 @@ export async function generateNames(prompt: string, count: number): Promise<stri
           content: prompt
         }
       ],
-      temperature: 0.7,
+      temperature: 0.9,
     })
 
     console.log('OpenAI Response:', response);
