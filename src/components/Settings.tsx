@@ -7,16 +7,17 @@ interface SettingsProps {
   nameCount: number;
   setNameCount: (count: number) => void;
   tlds: string[];
-  setTlds: React.Dispatch<React.SetStateAction<string[]>>;
+  setTlds: (newTlds: string[]) => void;
   maxPrice: number;
   setMaxPrice: (price: number) => void;
 }
 
 export function Settings({ nameCount, setNameCount, tlds, setTlds, maxPrice, setMaxPrice }: SettingsProps) {
   const handleTldChange = (tld: string) => {
-    setTlds((prev: string[]) => 
-      prev.includes(tld) ? prev.filter((t: string) => t !== tld) : [...prev, tld]
-    )
+    const newTlds = tlds.includes(tld)
+      ? tlds.filter((t: string) => t !== tld)
+      : [...tlds, tld];
+    setTlds(newTlds);
   }
 
   return (
@@ -62,7 +63,7 @@ export function Settings({ nameCount, setNameCount, tlds, setTlds, maxPrice, set
         </label>
         <Slider
           id="priceFilter"
-          max={100}
+          max={200}
           step={1}
           value={[maxPrice]}
           onValueChange={(value) => setMaxPrice(value[0])}

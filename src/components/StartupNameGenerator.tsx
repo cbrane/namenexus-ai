@@ -73,6 +73,15 @@ export default function StartupNameGenerator() {
     localStorage.setItem('savedDomains', JSON.stringify(updatedSavedDomains))
   }
 
+  const handleTldChange = (newTlds: string[]) => {
+    setTlds(newTlds);
+    if (newTlds.includes('.ai')) {
+      setMaxPrice(Math.max(80, maxPrice));
+    } else if (!newTlds.includes('.ai') && maxPrice === 80) {
+      setMaxPrice(50);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -86,7 +95,7 @@ export default function StartupNameGenerator() {
             nameCount={nameCount}
             setNameCount={setNameCount}
             tlds={tlds}
-            setTlds={setTlds}
+            setTlds={handleTldChange}
             maxPrice={maxPrice}
             setMaxPrice={setMaxPrice}
           />
