@@ -1,4 +1,5 @@
 # NameNexus - AI-powered startup naming with instant domain checks
+![image](https://github.com/user-attachments/assets/231ad96c-6b43-4894-8569-795ddc6f66cd)
 
 ## Description
 
